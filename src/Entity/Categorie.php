@@ -72,4 +72,9 @@ class Categorie
 
         return $this;
     }
+    public function __toString(): string
+{
+    return $this->getNom(); // Assuming there's a method getName() in the Categorie class
+}
+
 }
