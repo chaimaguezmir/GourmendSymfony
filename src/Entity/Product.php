@@ -3,8 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -13,30 +16,52 @@ class Product
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+    #[Assert\NotBlank(message: "Le titre ne doit pas être vide")]
+    #[Assert\Length(
+        min: 5,
+        minMessage: "Le titre doit avoir au moins 5 caractères"
+    )]
 
+    #[Assert\NotBlank(message: "Le titre ne doit pas être vide")]
     #[ORM\Column(length: 255)]
     private ?string $prod_name = null;
 
+    #[Assert\NotBlank(message: "Le titre ne doit pas être vide")]
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
+    #[Assert\NotBlank(message: "Le titre ne doit pas être vide")]
     #[ORM\Column(length: 255)]
     private ?string $stock = null;
 
+    #[Assert\NotBlank(message: "Le titre ne doit pas être vide")]
     #[ORM\Column(length: 255)]
     private ?string $price = null;
 
+
+    #[Assert\NotBlank(message: "Le titre ne doit pas être vide")]
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
+    #[Assert\NotBlank(message: "Le titre ne doit pas être vide")]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
+    #[Assert\NotBlank(message: "Le titre ne doit pas être vide")]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
+    #[Assert\NotBlank(message: "Le titre ne doit pas être vide")]
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Categorie $idCategorie = null;
+
+    #[ORM\ManyToMany(targetEntity: Panier::class, mappedBy: 'productId')]
+    private Collection $paniers;
+
+    public function __construct()
+    {
+        $this->paniers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -135,6 +160,33 @@ class Product
     public function setIdCategorie(?categorie $idCategorie): static
     {
         $this->idCategorie = $idCategorie;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Panier>
+     */
+    public function getPaniers(): Collection
+    {
+        return $this->paniers;
+    }
+
+    public function addPanier(Panier $panier): static
+    {
+        if (!$this->paniers->contains($panier)) {
+            $this->paniers->add($panier);
+            $panier->addProductId($this);
+        }
+
+        return $this;
+    }
+
+    public function removePanier(Panier $panier): static
+    {
+        if ($this->paniers->removeElement($panier)) {
+            $panier->removeProductId($this);
+        }
 
         return $this;
     }
