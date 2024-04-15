@@ -1,0 +1,87 @@
+{% extends 'front.html.twig' %}
+
+{% block body %}
+<div class="container my-5">
+    <br><br>
+    <h2>Your Cart</h2>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in panier %}
+                    {% for product in item.getProductId() %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ product.getImage() ? asset('uploads/' ~ product.getImage()) : asset('path/to/default/image.jpg') }}" alt="{{ product.getProdName() }} image" style="width: 70px; height: 70px; object-fit: cover; margin-right: 10px;">
+                                    {{ product.getProdName() }}
+                                </div>
+                            </td>
+                            <td>{{ product.getPrice() }}</td>
+                            <td>
+                                <input type="number" class="form-control quantity" id="quantity_{{ product.id }}" value="{{ item.getQuantity() }}" min="1" data-price="{{ product.getPrice() }}" data-product-id="{{ product.id }}">
+                            </td>
+                            <td id="total_price_{{ product.id }}">{{ item.getPrixTotal() }}</td>
+                            <td>
+<form action="{{ path('app_remove_from_cart', {'id': item.id}) }}" method="POST">
+                    <button class="btn btn-danger btn-sm" type="submit"><i class="fas fa-trash"></i></button>
+                </form>                         
+                   </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+    <a href="{{ path('app_product_front') }}">ajout du produit</a>
+
+       <form action="{{ path('app_validate_cart') }}" method="POST">
+    <button type="submit" class="btn btn-success">Valider le Panier</button>
+</form>
+
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const quantities = document.querySelectorAll('.quantity');
+    quantities.forEach(quantity => {
+        quantity.addEventListener('change', function () {
+            const productId = this.dataset.productId;
+            const pricePerUnit = parseFloat(this.dataset.price);
+            const newQuantity = parseInt(this.value);
+            const newTotalPrice = pricePerUnit * newQuantity;
+
+            document.getElementById('total_price_' + productId).innerText = newTotalPrice.toFixed(2);
+
+            fetch('/update-cart-quantity', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': '{{ csrf_token('update-quantity') }}'
+                },
+                body: JSON.stringify({productId: productId, quantity: newQuantity})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Quantity updated');
+                } else {
+                    console.error('Error updating quantity:', data.message);
+                }
+            })
+            .catch(error => console.error('Error updating quantity:', error));
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'Admin/base.html.twig'%}
+
+{% block title %}Product index{% endblock %}
+
+{% block body %}
+    <h1>Product index</h1>
+
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                 <td><img  style="width: 100px; height:100px; padding: 5px;" src="{{ asset('uploads/'~product.image) }}"/></td>
+
+                        <h5 class="card-title">{{ product.prodName }}</h5>
+                        <p class="card-text">Type: {{ product.type }}</p>
+                        <p class="card-text">Stock: {{ product.stock }}</p>
+                        <p class="card-text">Price: {{ product.price }}</p>
+                        <p class="card-text">Status: {{ product.status }}</p>
+                        <p class="card-text">Date: {{ product.date ? product.date|date('Y-m-d H:i:s') : '' }}</p>
+                        <a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-primary">Show</a>
+                        <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn btn-secondary">Edit</a>
+                        {# <form action="{{ path('app_add_to_cart') }}" method="post" class="d-inline">
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <button type="submit" class="btn btn-success">Add to Cart</button>
+                        </form> #}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>No products found.</p>
+        {% endfor %}
+    </div>
+
+    <a href="{{ path('app_product_new') }}" class="btn btn-success">Create new</a>
+{% endblock %}
