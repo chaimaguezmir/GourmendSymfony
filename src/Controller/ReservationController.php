@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/reservation')]
+
 class ReservationController extends AbstractController
 {
     #[Route('/', name: 'app_reservation_index', methods: ['GET'])]
@@ -21,6 +21,107 @@ class ReservationController extends AbstractController
             'reservations' => $reservationRepository->findAll(),
         ]);
     }
+
+
+
+   
+    #[Route('/front', name: 'front', methods: ['GET'])]
+public function front(ReservationRepository $productRepository): Response
+{
+    return $this->render('baseFront.html.twig', [
+        'products' => $productRepository->findAll(),
+    ]);
+}
+
+#[Route('/frontres', name: 'frontres', methods: ['GET'])]
+    public function frontres(ReservationRepository $productRepository): Response
+    {
+        return $this->render('reservation/reservationfront.html.twig', [
+            'reservations' => $productRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/frontresv', name: 'frontresv', methods: ['GET'])]
+    public function frontresv(ReservationRepository $productRepository): Response
+    {
+        return $this->render('reservation/indexfront.html.twig', [
+            'reservations' => $productRepository->findAll(),
+        ]);
+    }
+
+
+
+
+
+
+   
+    #[Route('/newreservation', name: 'app_reservation', methods: ['GET', 'POST'])]
+    public function reservationfront(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $reservation = new Reservation();
+        $form = $this->createForm(ReservationType::class, $reservation);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($reservation);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('frontres', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('reservation/reserverfront.html.twig', [
+            'reservation' => $reservation,
+            'form' => $form,
+        ]);
+    }
+
+
+
+
+
+
+
+    #[Route('/{id}/editfront', name: 'app_reservationedit', methods: ['GET', 'POST'])]
+    public function editfront(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(ReservationType::class, $reservation);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('frontresv', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('reservation/editfront.html.twig', [
+            'reservation' => $reservation,
+            'form' => $form,
+        ]);
+    }
+
+
+    #[Route('/{id}/del', name: 'app_reservation_deletefront', methods: ['POST'])]
+    public function deletefront(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$reservation->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($reservation);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('frontresv', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -85,4 +186,14 @@ class ReservationController extends AbstractController
 
         return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
+
+    
+
+
+   
+   
 }
+

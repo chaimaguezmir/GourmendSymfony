@@ -5,6 +5,8 @@
 
 {% block body %}
     <h1>Edit Reservation</h1>
+                                {{ form_start(form,{attr:{novalidate:'novalidate'}}) }}
+
 
     {{ include('reservation/_form.html.twig', {'button_label': 'Update'}) }}
 

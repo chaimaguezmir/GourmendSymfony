@@ -5,6 +5,8 @@
 
 {% block body %}
     <h1>Edit RestaurantTable</h1>
+                                {{ form_start(form,{attr:{novalidate:'novalidate'}}) }}
+
 
     {{ include('restaurant_table/_form.html.twig', {'button_label': 'Update'}) }}
 

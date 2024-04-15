@@ -1,0 +1,47 @@
+{% extends 'front.html.twig' %}
+
+{% block title %}Reservation index{% endblock %}
+
+{% block body %}
+<br><br><br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>CustomerName</th>
+                <th>PersonneId</th>
+                <th>NumberPersonnes</th>
+                <th>Status</th>
+                <th>DateTime</th>
+                <th>Edit</th>
+                <th>  Delete </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.customerName }}</td>
+                <td>{{ reservation.personneId }}</td>
+                <td>{{ reservation.numberPersonnes }}</td>
+                <td>{{ reservation.status }}</td>
+                <td>{{ reservation.dateTime ? reservation.dateTime|date('Y-m-d') : '' }}</td>
+                 <td>
+                    <a href="{{ path('app_reservationedit', {'id': reservation.id}) }}">edit</a>
+                                     </td>
+                 <td>
+
+                   {{ include('reservation/delete.html.twig') }}
+
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

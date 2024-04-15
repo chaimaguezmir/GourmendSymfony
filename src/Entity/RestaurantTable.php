@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\RestaurantTableRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RestaurantTableRepository::class)]
 class RestaurantTable
@@ -13,8 +14,15 @@ class RestaurantTable
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\NotBlank]
-    #[Assert\Type(type: 'int')]
+    #[Assert\NotBlank(message: "Le capacity ne doit pas être vide")]
+    #[Assert\Type(
+        type: 'int',
+        message: "Le capacity doit être une chaîne."
+    )]
+    #[Assert\Regex(
+        pattern: '/^\d+(\.\d+)?$/',
+        message: "Le capacity doit être un nombre."
+    )]
     #[ORM\Column]
     private ?int $capacity = null;
 
@@ -23,8 +31,12 @@ class RestaurantTable
     #[ORM\Column(length: 255)]
     private ?string $available = null;
 
-    #[Assert\NotBlank]
-    #[Assert\Length(min: 3, max: 255)]
+    #[Assert\NotBlank(message: "La description ne doit pas être vide")]
+    #[Assert\Length(
+        min: 8,
+        minMessage: "La description doit avoir au moins 8 caractères"
+    )]
+
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 

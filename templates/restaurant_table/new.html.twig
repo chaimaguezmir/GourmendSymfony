@@ -6,6 +6,7 @@
 {% block body %}
     <h1>Create new RestaurantTable</h1>
     
+                            {{ form_start(form,{attr:{novalidate:'novalidate'}}) }}
 
     {{ include('restaurant_table/_form.html.twig') }}
 

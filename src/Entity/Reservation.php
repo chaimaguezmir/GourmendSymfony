@@ -16,23 +16,51 @@ class Reservation
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 255)]
+
+
+
+    #[Assert\NotBlank(message: "Le nom ne doit pas être vide")]
+    #[Assert\Length(
+        min: 4,
+        minMessage: "Le nom doit avoir au moins 4 caractères"
+    )]
+
     #[ORM\Column(length: 255)]
     private ?string $customerName = null;
 
-    #[Assert\NotBlank]
-    #[Assert\Type(type: 'int')]
+
+
+
+    #[Assert\NotBlank(message: "Le personneId ne doit pas être vide")]
+    #[Assert\Type(
+        type: 'int',
+        message: "Le personneId doit être une chaîne."
+    )]
+    #[Assert\Regex(
+        pattern: '/^\d+(\.\d+)?$/',
+        message: "Le personneId doit être un nombre."
+    )]
     #[ORM\Column]
     private ?int $personneId = null;
 
-    #[Assert\NotBlank]
-    #[Assert\Type(type: 'int')]
+    #[Assert\NotBlank(message: "Le numberPersonnes ne doit pas être vide")]
+    #[Assert\Type(
+        type: 'int',
+        message: "Le numberPersonnes doit être une chaîne."
+    )]
+    #[Assert\Regex(
+        pattern: '/^\d+(\.\d+)?$/',
+        message: "Le numberPersonnes doit être un nombre."
+    )]
     #[ORM\Column]
     private ?int $numberPersonnes = null;
 
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 255)]
+    #[Assert\NotBlank(message: "Le status ne doit pas être vide")]
+    #[Assert\Length(
+        min: 4,
+        minMessage: "Le status doit avoir au moins 4 caractères"
+    )]
+
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
