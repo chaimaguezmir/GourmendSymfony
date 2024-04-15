@@ -1,0 +1,93 @@
+{% extends 'ClientSide/base.html.twig' %}
+
+{% block title %}Livraison index{% endblock %}
+
+{% block body %}
+    <div class="container"> <!-- Ajoutez une classe container pour centrer le contenu -->
+        <h1 class="text-center">Livraison index</h1> <!-- Utilisez la classe text-center pour centrer le titre -->
+        <div class="input-group no-border">
+            <input type="text" value="" class="form-control" placeholder="Search..." id="myInput">
+            <button type="submit" class="btn btn-default btn-round btn-just-icon" id="searchButton">
+                <i class="material-icons">search</i>
+            </button>
+        </div>
+        <table class="table" id="myTable">
+            <thead>
+                <tr>
+                    <th class="sortable" data-column="id">Id</th>
+                    <th class="sortable" data-column="adresseDepart">Adresse_depart</th>
+                    <th class="sortable" data-column="adresseArrive">Adresse_arrive</th>
+                    <th class="sortable" data-column="etat">Etat</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for livraison in livraisons %}
+                <tr>
+                    <td>{{ livraison.id }}</td>
+                    <td>{{ livraison.adresseDepart }}</td>
+                    <td>{{ livraison.adresseArrive }}</td>
+                    <td>{{ livraison.etat }}</td>
+                 
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a  href="{{ path('excel') }}" class="btn btn-primary m-2" style="display:block ; margin-bottom: 2.5em; background-color: #00A8B3;">Générer Excel  <i class="fa fa-table" aria-hidden="true"></i></a>
+        {# <a href="{{ path('app_livraison_new') }}">Create new</a> #}
+    </div> <!-- Fermez la balise container -->
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+
+                $("#myTable tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            // Tri des colonnes
+            $(".sortable").on("click", function() {
+                var column = $(this).data("column");
+                var order = $(this).data("order") || "asc";
+
+                $("#myTable th").removeAttr("data-order");
+                $(this).data("order", order === "asc" ? "desc" : "asc");
+
+                var sortedRows = $("#myTable tbody tr").toArray().sort(comparer($(this).index()));
+
+                if (order === "desc") {
+                    sortedRows = sortedRows.reverse();
+                }
+
+                $("#myTable tbody").empty().append(sortedRows);
+            });
+
+            function comparer(index) {
+                return function(a, b) {
+                    var valA = getCellValue(a, index),
+                        valB = getCellValue(b, index);
+
+                    return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
+                };
+            }
+
+            function getCellValue(row, index) {
+                return $(row).children("td").eq(index).text();
+            }
+
+            $("#myInput").keypress(function(event) {
+                if (event.which === 13) {
+                    $("#searchButton").click();
+                }
+            });
+
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'Admin/base.html.twig'%}
+{% block body %}
+ <div class="container">
+    <h2>Users Table </h2>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          
+          <th scope="col">Nom</th>
+          <th scope="col">Prenom</th>
+          <th scope="col">Age</th>
+          <th scope="col">Email</th>
+          <th scope="col">Adresse</th>
+          <th scope="col">Supprimer</th>
+           
+        </tr>
+      </thead>
+      <tbody>
+      {% for x in i %}
+        <tr>
+          <th scope="row">{{x.name}}</th>
+          <td>{{x.prenom}}</td>
+          <td>{{x.age}}</td>
+          <td>{{x.email}}</td>
+          <td>{{x.adresse}}</td>
+          <td><a href="{{path('app_user.Supprimer',{'id': x.id})}}" >Supprimer</a></td>
+        </tr>
+     {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
