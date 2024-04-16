@@ -1,0 +1,6 @@
+{
+    "require": {
+        "php-flasher/flasher-symfony": "^1.15",
+        "ultramsg/whatsapp-php-sdk": "^2.0"
+    }
+}
