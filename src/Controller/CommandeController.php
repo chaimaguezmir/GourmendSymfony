@@ -71,8 +71,8 @@ class CommandeController extends AbstractController
     public function envoyerMessageWhatsApp($id): Response
     {
         require_once __DIR__ . '/../../vendor/autoload.php'; // Make sure the path is correct
-        $ultramsg_token = "yrze6q5lbwyb5wr2"; // Your Ultramsg token
-        $instance_id = "instance79748"; // Your Ultramsg instance ID
+        $ultramsg_token = "dn97mzq40dul38st"; // Your Ultramsg token
+        $instance_id = "instance79894"; // Your Ultramsg instance ID
     
         $client = new WhatsAppApi($ultramsg_token, $instance_id);
     

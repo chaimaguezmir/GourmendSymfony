@@ -36,7 +36,7 @@ public function generateUserExcel(LivraisonRepository $liv,UserRepository $us,Co
     $sheet = $spreadsheet->getActiveSheet();
 
     // Define column names
-    $columnNames = ['adresse Depart', 'adresse Arrive', 'Etat'];
+    $columnNames = ['adresse Depart', 'adresse Arrive', 'Etat',];
 
     // Set the entire first row at once and make it bold
     $sheet->fromArray([$columnNames], null, 'A1');
@@ -87,7 +87,7 @@ public function generateUserExcel(LivraisonRepository $liv,UserRepository $us,Co
         ]);
     }
     //composer require dompdf/dompdf
-    #[Route('/generate-pdf-livraisons', name: 'generate_pdf_livraisons')]
+    #[Route('/generate-pdf-cmds', name: 'generate_pdf_livraisons')]
     public function generatePdfCommande(CommandeRepository $cmd): Response
     {
         // Récupérez toutes les livraisons depuis le repository
