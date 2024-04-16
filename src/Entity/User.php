@@ -4,10 +4,12 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -16,6 +18,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+     #[Assert\NotBlank(message: "Ce champ ne peut pas être vide.")]
+      #[Assert\NotNull(message:'Veuillez renseigner ce champ')]
+       #[Assert\Email(message: 'The email  is not a valid email.', )]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -25,15 +30,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+     #[Assert\NotBlank(message: "Ce champ ne peut pas être vide.")]
+     #[Assert\NotNull(message:'Veuillez renseigner ce champ')]
+    #[Assert\Length(min: 8,minMessage: 'Your password must be at least {{ limit }} characters long')]
+    #[Assert\Regex(
+        pattern: '/(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}/',
+
+        message: 'Your password must contain at least one uppercase letter, one lowercase letter, and one number',
+    )]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+     #[Assert\NotBlank(message: "Ce champ ne peut pas être vide.")]
+      #[Assert\NotNull(message:'Veuillez renseigner ce champ')]
+    #[Assert\Length(min: 4,minMessage: 'Veuillez avoir au moins 4 caractères')]
     private ?string $name = null;
 
     #[ORM\Column]
+     #[Assert\Positive]
     private ?int $age = null;
 
     #[ORM\Column(length: 255)]
+      #[Assert\NotBlank(message: "Ce champ ne peut pas être vide.")]
+    #[Assert\Length(min: 4,minMessage: 'Veuillez avoir au moins 4 caractères')]
     private ?string $prenom = null;
 
     #[ORM\Column(nullable: true)]
@@ -47,6 +66,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
+
+    #[ORM\Column(type: 'boolean')]
+    private $isVerified = false;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isActive = null;
 
     public function getId(): ?int
     {
@@ -217,6 +242,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setImage(?string $image): static
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function IsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setActive(bool $isActive): static
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }

@@ -48,9 +48,9 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="{{path('app_user.Afficher')}}">
                      <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>User Management</span></a>
             </li>
 
             <!-- Divider -->
@@ -274,7 +274,7 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="{{path('app_logout')}}" >
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -285,7 +285,24 @@
 
                 </nav>
                 <!-- End of Topbar -->
-
+                <!-- Begin Page Content -->
+                <div class="container-fluid px-4">
+                    {% for message in app.session.flashBag.get('info') %}
+                        <div class="alert alert-info" >
+                            {{message}}
+                        </div>
+                    {% endfor %}
+                    {% for message in app.session.flashBag.get('success') %}
+                        <div class="alert alert-success" >
+                            {{message}}
+                        </div>
+                    {% endfor %}
+                    {% for message in app.session.flashBag.get('error') %}
+                        <div class="alert alert-danger" >
+                            {{message}}
+                        </div>
+                    {% endfor %}
+                </div>
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                    {% block body %}
@@ -333,7 +350,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="{{ path('app_logout') }}">Logout</a>
                 </div>
             </div>
         </div>
