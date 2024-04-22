@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Knp\Component\Pager\PaginatorInterface;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -22,10 +23,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class ProductController extends AbstractController
 {
     #[Route('/P', name: 'app_product_index', methods: ['GET'])]
-    public function index(ProductRepository $productRepository): Response
+    public function index(ProductRepository $productRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $productsQuery = $productRepository->findAll(); // Récupérer tous les produits
+        $pagination = $paginator->paginate(
+            $productsQuery, // La query à paginer
+            $request->query->getInt('page', 1), // Récupérer le numéro de page à partir de la requête, 1 par défaut
+            3 // Nombre d'éléments par page
+        );
+    
         return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
+            'products' => $pagination, // Passer la pagination à la vue
         ]);
     }
 
@@ -46,6 +54,11 @@ class ProductController extends AbstractController
             $product->setImage($fileName);
             $entityManager->persist($product);
             $entityManager->flush();
+            
+            $this->addFlash(
+                'success',
+                'Added successfully!'
+            );
 
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -89,6 +102,13 @@ class ProductController extends AbstractController
 
             $product->setImage($fileName);
             $entityManager->flush();
+
+
+            $this->addFlash(
+                'info',
+                'Updated successfully!'
+            );
+
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -104,6 +124,11 @@ class ProductController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             $entityManager->remove($product);
             $entityManager->flush();
+
+            $this->addFlash(
+                'del',
+                'deleted successfully!'
+            );
         }
 
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
@@ -118,6 +143,24 @@ class ProductController extends AbstractController
         'categories' => $categories,
     ]);
 }*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

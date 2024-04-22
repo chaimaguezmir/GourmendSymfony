@@ -6,6 +6,8 @@ use App\Entity\Categorie;
 use App\Form\CategorieType;
 use App\Repository\CategorieRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +24,8 @@ class CategorieController extends AbstractController
         ]);
     }
 
+
+
     #[Route('/new', name: 'app_categorie_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -33,6 +37,10 @@ class CategorieController extends AbstractController
             $entityManager->persist($categorie);
             $entityManager->flush();
 
+            $this->addFlash(
+                'success',
+                'Added successfully!'
+            );
             return $this->redirectToRoute('app_categorie_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -59,6 +67,11 @@ class CategorieController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash(
+                'info',
+                'Added successfully!'
+            );
+
             return $this->redirectToRoute('app_categorie_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -74,12 +87,18 @@ class CategorieController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$categorie->getId(), $request->request->get('_token'))) {
             $entityManager->remove($categorie);
             $entityManager->flush();
+
+            $this->addFlash(
+                'del',
+                'Added successfully!'
+            );
         }
 
         return $this->redirectToRoute('app_categorie_index', [], Response::HTTP_SEE_OTHER);
     }
 
 
+ 
 
 
 
@@ -103,7 +122,7 @@ class CategorieController extends AbstractController
 
 
 
-
+ 
 
     
 

@@ -113,6 +113,7 @@ public function validateCart(): Response
         $this->entityManager->remove($item);
     }
     $this->entityManager->flush();
+   
 
     $this->addFlash('success', 'Votre panier a été validé avec succès!');
     return $this->redirectToRoute('app_product_front'); // Redirection vers la page du panier ou une page de confirmation

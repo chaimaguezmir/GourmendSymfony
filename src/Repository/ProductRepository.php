@@ -54,4 +54,37 @@ public function findByCategoryId(int $categoryId): array
         ->getQuery()
         ->getResult();
 }
+
+
+/**
+     * return Product[]
+     */
+   
+     public function findprodbyNom($nom)
+     {
+         return $this->createQueryBuilder('cat')
+             ->where('cat.nom LIKE :nom')
+             ->setParameter('nom', '%'.$nom.'%')
+             ->getQuery()
+             ->getResult();
+     }
+
+     public function trieprod()
+    {
+        return $this->createQueryBuilder('prod')
+            ->orderBy('prod.price', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    public function trieproddes()
+    {
+        return $this->createQueryBuilder('prod')
+            ->orderBy('prod.price', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
 }

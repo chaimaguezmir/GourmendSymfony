@@ -5,6 +5,86 @@
 {% block body %}
     <h1>Gestion Categorie </h1>
 
+
+{% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+        {{message}}
+    {% endfor %}
+
+     {% for message in app.flashes('info') %}
+        <div class="alert alert-warning">
+        {{message}}
+    {% endfor %}
+
+     {% for message in app.flashes('del') %}
+        <div class="alert alert-danger">
+        {{message}}
+    {% endfor %}
+    
+     {% block contenpage %}
+<div class="example-wrapper">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Categorie</h4>
+            </p>
+            <section class="s-crossfit">
+                <div class="container">
+                    <h2>Rechercher Categorie !!</h2>
+
+                    <div class="sidebar-search">
+
+                        <div class="input-group custom-search-form">
+
+                            <input type="text" id="search" class="form-control" placeholder="Search here">
+                        </div>
+                        <!-- /input-group -->
+                    </div>
+
+                    <div class="row" id="search">
+
+                    </div>
+                    <br><br><br><br>
+                </div>
+            </section>
+            <script src="{{ asset('assets/js/jquery.js') }}"></script>
+            <script
+                    src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')}}">
+            </script>
+            <script>
+                $( document ).ready(function() {
+                    var currentRequest = null;
+                    $("#search").keyup(function(e){
+                        /* La variable value va prendre la valeur insérer dans le champ de texte
+                        afin d’effectuer la recherche */
+                        var value = $(this).val();
+                        if(currentRequest != null) {
+                            currentRequest.abort();
+                        }
+                        /* Ajax est lancé lors du remplissage du champ texte dont l’id est
+                        « search » pour faire la recherche */
+                        currentRequest = $.ajax({
+                      url : "{{ path('recherchearb') }}",
+
+                            type : 'GET',
+                            data: {
+                                'searchValue' : value
+                            },
+                            success : function(retour)
+                            {
+                                $('#all').html(retour);
+                            },
+                        });
+                        return false;
+                    });
+                });
+            </script>
+
+
+
+                        <a href="{{path('triespc') }}"><i class="btn btn-danger" data-feather="arrow-down"></i>Nom Ascendant</a>
+                        <a href="{{path('triespcDESC') }}"><i class="btn btn-danger" data-feather="arrow-down"></i>Nom Desendent</a>
+
+
     <table class="table">
         <thead>
             <tr>
@@ -30,6 +110,8 @@
         {% endfor %}
         </tbody>
     </table>
-
+<span class="badge badge-sm bg-gradient"> <a href="{{ path('listArb') }}">PDF</a></span>
+<br>    <br>
     <a href="{{ path('app_categorie_new') }}">Create new</a>
 {% endblock %}
+            {% endblock %}

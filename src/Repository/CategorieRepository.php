@@ -22,8 +22,35 @@ class CategorieRepository extends ServiceEntityRepository
         parent::__construct($registry, Categorie::class);
     }
   
+    /**
+     * return Categorie[]
+     */
+   
+     public function findByNom($nom)
+     {
+         return $this->createQueryBuilder('cat')
+             ->where('cat.nom LIKE :nom')
+             ->setParameter('nom', '%'.$nom.'%')
+             ->getQuery()
+             ->getResult();
+     }
 
+     public function trie()
+     {
+         return $this->createQueryBuilder('categorie')
+             ->orderBy('categorie.nom', 'ASC')
+             ->getQuery()
+             ->getResult();
+     }
 
+     public function trieDes()
+     {
+         return $this->createQueryBuilder('categorie')
+             ->orderBy('categorie.nom', 'DESC')
+             ->getQuery()
+             ->getResult();
+     }
+ 
 //    /**
 //     * @return Categorie[] Returns an array of Categorie objects
 //     */
@@ -57,6 +84,8 @@ public function findAllWithProducts()
         ->getQuery()
         ->getResult();
 }
+
+
 
 }
 
