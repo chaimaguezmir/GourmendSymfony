@@ -48,16 +48,21 @@
                   <!-- Filtrage et Tri -->
 
                   <div class="form-inline mb-3 ">
-                   
-                    <input class="form-control mr-2" placplaceholder="Recherchez ici..." id="search-user" >
-                    <button class="btn bg-success  text-white">Rechercher</button>
+
+
+                      {{ form_start(form,{'attr': {'novalidate': 'novalidate'}} ) }}
+                      {{ form_row(form.mots, {'attr': {'class': 'form-control mr-2',
+                          'id' : 'searchInput'
+                      }}) }}
+                      {{ form_row(form.Rechercher, {'attr': {'class': 'btn bg-success  text-white',
+                      }}) }}
+
+                      {{ form_end(form) }}
+
+{#                    <input class="form-control mr-2" placplaceholder="Recherchez ici..." id="search-user" >#}
+{#                    <button class="btn bg-success  text-white">Rechercher</button>#}
 {#                      <div class="form-inline mb-3">#}
-                          <select class="form-control ml-auto  mr-2">
-                              <option value="">Option 1</option>
-                              <option value="">Option 2</option>
-                              <option value="">Option 3</option>
-                          </select>
-                          <button class="btn bg-success  text-white btn-small blColor" onclick="handleFilter()">Filter</button>
+
 {#                      </div>#}
                   </div>
 
@@ -84,16 +89,21 @@
                                           <td>{{ user.prenom }}</td>
                                           <td>{{ user.age }}</td>
                                           <td>
-                                              <label class="form-switch mt-2">
+                                              {% if user.isActive %}
+                                                  <a class="btn btn-danger btn-sm" href="{{ path('user.active', {'id': user.id}) }}">Desactiver</a>
+                                              {% else %}
+                                                  <a class="btn btn-success btn-sm" href="{{ path('user.active', {'id': user.id}) }}">Activer</a>
+                                              {% endif %}
+{#                                              <label class="form-switch mt-2">#}
 
-                                                  <input type="checkbox"
-                                                        id="activation"
-                                                          {{ (user.isActive)? 'checked' : '' }}
-                                                         data-id="{{ user.id }}"
-                                                  />
-                                                  <span class="form-slider"></span>
+{#                                                  <input type="checkbox"#}
+{#                                                        id="activation"#}
+{#                                                          {{ (user.isActive)? 'checked' : '' }}#}
+{#                                                         data-id="{{ user.id }}"#}
+{#                                                  />#}
+{#                                                  <span class="form-slider"></span>#}
 
-                                              </label>
+{#                                              </label>#}
 
                                               {#            <div class="col-sm-5">#}
                                               {#                {% set foo = 'true' %}#}
@@ -110,6 +120,7 @@
                                           <td>
                                               <a href="{{ path('app_user.Supprimer', {'id': user.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
                                               <a href="{{ path('app_user.Modifier', {'id': user.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                              <a href="{{ path('user.details', {'id': user.id}) }}" class="btn btn-success btn-sm">Afficher</a>
                                           </td>
                                       </tr>
                                   {% endfor %}

@@ -23,14 +23,18 @@
         <td>{{ user.prenom }}</td>
         <td>{{ user.age }}</td>
         <td>
-            <label class="form-switch mt-2">
+{#            <label class="form-switch mt-2">#}
 
-                <input type="checkbox" {{ (user.isActive)? 'checked' : '' }}
-                       data-id="{{ user.id }}"
-                />
-                <span class="form-slider"></span>
-
-            </label>
+{#                <input type="checkbox" {{ (user.isActive)? 'checked' : '' }}#}
+{#                       data-id="{{ user.id }}"#}
+{#                />#}
+{#                <span class="form-slider"></span>#}
+            {% if user.isActive %}
+            <a class="btn  bg-danger  text-white btn-small mr-auto" href="{{ path('user.active', {'id': user.id}) }}">Desactiver</a>
+            {% else %}
+            <a class="btn  bg-danger  text-white btn-small mr-auto" href="{{ path('user.active', {'id': user.id}) }}">Activer</a>
+                {% endif %}
+{#            </label>#}
 
 {#            <div class="col-sm-5">#}
 {#                {% set foo = 'true' %}#}

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\SearchUserType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Service\UploderService;
@@ -76,17 +77,14 @@ class UserController extends AbstractController
     public function AfficherUser(UserRepository $userRepository,Request $request): Response
     {
         $i = $userRepository->findAll();
-//          $searchVal = $request->get('key');
-//          $i = $userRepository->searchUser($searchVal);
-//        if ($request->isXmlHttpRequest()) {
-//            return new JsonResponse([
-//                'content' => $this->renderView('Admin/cours/listUser.html.twig', [
-//                    'i' => $i
-//                ])
-//            ]);
-//        };
+          $form = $this->createForm(SearchUserType::class);
+           $search = $form->handleRequest($request);
+           if($form->isSubmitted() && $form->isValid()){
+               $i=$userRepository->search($search->get('mots')->getData());
+           }
         return $this->render('Admin/User/AfficherUser.html.twig', [
-            'i' => $i
+            'i' => $i,
+            'form'  => $form->createView()
         ]);
 
     }
@@ -122,6 +120,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid() && $form->isRequired()) {
             $em = $this->managerRegistry->getManager();
+            $user->setActive(true);
             $picture = $form->get('image')->getData();
             $password = $form->get('password')->getData();
             $user->setPassword(
@@ -154,7 +153,16 @@ class UserController extends AbstractController
         $em = $managerRegistry->getManager();
         $em->persist($user);
         $em->flush();
-        return new Response('true');
+        return $this->redirectToRoute('app_user.Afficher');
+    }
+    #[Route('/user/details/{id}', name: 'user.details')]
+    public function UserDetails(User $user =null,UserRepository $repository)
+    {
+
+
+        return $this->render('Admin/User/showUserDetails.html.twig', [
+            'user' => $user
+        ]);
     }
 
 }

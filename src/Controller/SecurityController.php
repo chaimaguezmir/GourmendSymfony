@@ -28,7 +28,7 @@ class SecurityController extends AbstractController
     public function loginCheck(Request $request)
     {
         // Redirect user to a specific space based on some condition
-        if ( $this->isGranted("ROLE_ADMIN")) {
+        if ( $this->isGranted("ROLE_ADMIN") ) {
             return $this->redirectToRoute('app_user.Afficher');
 
         } else if($this->isGranted("ROLE_USER")) {

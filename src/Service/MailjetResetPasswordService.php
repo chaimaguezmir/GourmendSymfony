@@ -18,7 +18,7 @@ class MailjetResetPasswordService
                 [
                     'From' => [
                         'Email' => "benslimen.louay@esprit.tn",
-                        'Name' => "no-replyGourmend"
+                        'Name' => "no-replyMagic mind"
                     ],
                     'To' => [
                         [

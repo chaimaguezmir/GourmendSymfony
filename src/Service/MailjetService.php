@@ -18,7 +18,7 @@ class MailjetService
                [
                    'From' => [
                        'Email' => "benslimen.louay@esprit.tn",
-                       'Name' => "no-replyGOURMAND"
+                       'Name' => "no-replyMagic mind"
                    ],
                    'To' => [
                        [

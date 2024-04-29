@@ -17,7 +17,13 @@ class TestController extends AbstractController
         return $this->render('ClientSide/base.html.twig', [
             'name' => 'chaima',
         ]);
-    } 
+    } #[Route('/home', name: 'app_test1')]
+    public function index1(): Response
+    {
+        return $this->render('ClientSide/base.html.twig', [
+            'name' => 'chaima',
+        ]);
+    }
     #[Route('/email')]
     public function sendEmail(MailerInterface $mailer)
     {
