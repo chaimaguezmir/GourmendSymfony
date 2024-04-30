@@ -4,7 +4,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": "8.2.12",
+        "php": "8.1.12",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/dbal": "^3.3",
@@ -22,6 +22,7 @@
         "sasedev/mpdf-bundle": "^2.0",
         "sensio/framework-extra-bundle": "^6.2",
         "snipe/banbuilder": "dev-master",
+        "spiriitlabs/form-filter-bundle": "^10.0",
         "stripe/stripe-php": "^13.13",
         "symfony/asset": "5.4.*",
         "symfony/asset-mapper": "v6.3.0-BETA1",

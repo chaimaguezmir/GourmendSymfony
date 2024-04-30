@@ -41,10 +41,15 @@
                     <p class="card-text">Price: {{ product.price }}</p>
                     <p class="card-text">Category: {{ product.idCategorie.nom }}</p>
                     <a href="{{ path('app_product_showw', {'id': product.id}) }}" class="btn btn-primary">Show</a>
+                                  <a href="{{ path('app_product_rating_new', {'id': product.id}) }}" class="btn btn-success">add ratting</a>
+                        {% if product.stock != 0 %}
+
                     <form action="{{ path('app_add_to_cart') }}" method="post" class="d-inline">
                             <input type="hidden" name="product_id" value="{{ product.id }}">
                             <button type="submit" class="btn btn-success">Add to Cart</button>
                         </form>
+                                                              {% endif %}
+
                 </div>
             </div>
         </div>

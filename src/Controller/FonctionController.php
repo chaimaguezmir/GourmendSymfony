@@ -135,9 +135,9 @@ class FonctionController extends AbstractController
 /**
      * @Route("/stats", name="stats")
      */
-    public function statistiques(ProductRepository $footRepo){
+    public function statistiques(ProductRepository $footRepo){ //stat tekhdem f product
         // On va chercher toutes les menus
-        $menus = $footRepo->findAll();
+        $menus = $footRepo->findAll(); //bsh tekhdem aal kol matel9ah f woset tableau
 
 //Data Category
         $foot = $footRepo->createQueryBuilder('a')
@@ -147,12 +147,12 @@ class FonctionController extends AbstractController
             ->getQuery()
             ->getSingleScalarResult();
 
-        $hand = $footRepo->createQueryBuilder('a')
+        $hand = $footRepo->createQueryBuilder('a') // methode utilise par doctrine pour créer des requêtes sql
             ->select('count(a.id)')
             ->Where('a.price= :price')
             ->setParameter('price',"11.11")
-            ->getQuery()
-            ->getSingleScalarResult();
+            ->getQuery() //convertit le QueryBuilder en un objet Query utilisable par Doctrine
+            ->getSingleScalarResult();//nestaamelouha f doctrine pour excuter o trajaalik un valeur
         $volley= $footRepo->createQueryBuilder('a')
             ->select('count(a.id)')
             ->Where('a.price= :price')

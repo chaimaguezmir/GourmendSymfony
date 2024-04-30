@@ -55,7 +55,7 @@ class Product
     #[ORM\Column(type: "string", length: 255)]
     private ?string $price = null;
 
-    #[Assert\NotBlank(message: "Le titre ne doit pas être vide")]
+    #[Assert\NotBlank(message: "Le status ne doit pas être vide")]
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
@@ -74,9 +74,13 @@ class Product
     #[ORM\ManyToMany(targetEntity: Panier::class, mappedBy: 'productId')]
     private Collection $paniers;
 
+    #[ORM\OneToMany(mappedBy: 'Product', targetEntity: ProductRating::class)]
+    private Collection $productRatings;
+
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
+        $this->productRatings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -202,6 +206,36 @@ class Product
     {
         if ($this->paniers->removeElement($panier)) {
             $panier->removeProductId($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProductRating>
+     */
+    public function getProductRatings(): Collection
+    {
+        return $this->productRatings;
+    }
+
+    public function addProductRating(ProductRating $productRating): static
+    {
+        if (!$this->productRatings->contains($productRating)) {
+            $this->productRatings->add($productRating);
+            $productRating->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductRating(ProductRating $productRating): static
+    {
+        if ($this->productRatings->removeElement($productRating)) {
+            // set the owning side to null (unless already changed)
+            if ($productRating->getProduct() === $this) {
+                $productRating->setProduct(null);
+            }
         }
 
         return $this;

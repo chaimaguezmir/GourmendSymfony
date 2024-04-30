@@ -3,115 +3,72 @@
 {% block title %}Gestion Categorie{% endblock %}
 
 {% block body %}
-    <h1>Gestion Categorie </h1>
+                <div class="input-group">
+        <div class="search-container">
+            <label for="search-input" class="sr-only">Search Category</label>
+            <input id="search-input" class="form-control" type="text" placeholder="Search Category..." style="width: 30%; padding: 10px; margin:13px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;">
+        </div>  
+    </div>
 
+    <h1>Gestion Categorie</h1>
 
-{% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-        {{message}}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
     {% endfor %}
 
-     {% for message in app.flashes('info') %}
-        <div class="alert alert-warning">
-        {{message}}
+    {% for message in app.flashes('info') %}
+        <div class="alert alert-warning">{{ message }}</div>
     {% endfor %}
 
-     {% for message in app.flashes('del') %}
-        <div class="alert alert-danger">
-        {{message}}
+    {% for message in app.flashes('del') %}
+        <div class="alert alert-danger">{{ message }}</div>
     {% endfor %}
-    
-     {% block contenpage %}
-<div class="example-wrapper">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">Categorie</h4>
-            </p>
-            <section class="s-crossfit">
-                <div class="container">
-                    <h2>Rechercher Categorie !!</h2>
 
-                    <div class="sidebar-search">
-
-                        <div class="input-group custom-search-form">
-
-                            <input type="text" id="search" class="form-control" placeholder="Search here">
-                        </div>
-                        <!-- /input-group -->
-                    </div>
-
-                    <div class="row" id="search">
-
-                    </div>
-                    <br><br><br><br>
-                </div>
-            </section>
-            <script src="{{ asset('assets/js/jquery.js') }}"></script>
-            <script
-                    src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')}}">
-            </script>
-            <script>
-                $( document ).ready(function() {
-                    var currentRequest = null;
-                    $("#search").keyup(function(e){
-                        /* La variable value va prendre la valeur insérer dans le champ de texte
-                        afin d’effectuer la recherche */
-                        var value = $(this).val();
-                        if(currentRequest != null) {
-                            currentRequest.abort();
-                        }
-                        /* Ajax est lancé lors du remplissage du champ texte dont l’id est
-                        « search » pour faire la recherche */
-                        currentRequest = $.ajax({
-                      url : "{{ path('recherchearb') }}",
-
-                            type : 'GET',
-                            data: {
-                                'searchValue' : value
-                            },
-                            success : function(retour)
-                            {
-                                $('#all').html(retour);
-                            },
-                        });
-                        return false;
-                    });
-                });
-            </script>
-
-
-
-                        <a href="{{path('triespc') }}"><i class="btn btn-danger" data-feather="arrow-down"></i>Nom Ascendant</a>
+                <a href="{{path('triespc') }}"><i class="btn btn-danger" data-feather="arrow-down"></i>Nom Ascendant</a>
                         <a href="{{path('triespcDESC') }}"><i class="btn btn-danger" data-feather="arrow-down"></i>Nom Desendent</a>
-
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Nom</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for categorie in categories %}
-            <tr>
-                <td>{{ categorie.id }}</td>
-                <td>{{ categorie.nom }}</td>
-                <td>
-                    <a href="{{ path('app_categorie_show', {'id': categorie.id}) }}">show</a>
-                    <a href="{{ path('app_categorie_edit', {'id': categorie.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
+            {% for categorie in categories %}
+                <tr>
+                    <td>{{ categorie.id }}</td>
+                    <td>{{ categorie.nom }}</td>
+                    <td>
+                        <a href="{{ path('app_categorie_show', {'id': categorie.id}) }}">Show</a>
+                        <a href="{{ path('app_categorie_edit', {'id': categorie.id}) }}">Edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">No records found</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
-<span class="badge badge-sm bg-gradient"> <a href="{{ path('listArb') }}">PDF</a></span>
-<br>    <br>
+
+    <span class="badge badge-sm bg-gradient"> <a href="{{ path('pdf') }}">PDF</a></span>
+    <br> <br>
     <a href="{{ path('app_categorie_new') }}">Create new</a>
+
+    {% block js %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script>
+    $(document).ready(function() {
+        $("#search-input").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("table tbody tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+
+    {% endblock %}
 {% endblock %}
-            {% endblock %}

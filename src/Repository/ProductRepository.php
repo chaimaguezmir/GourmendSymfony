@@ -21,6 +21,22 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+/**
+ * Calculate statistics of products based on their ratings.
+ *
+ * @return array
+ */
+public function calculateRatingStatistics(): array
+{
+    return $this->createQueryBuilder('p')
+        ->select('p.prod_name', 'AVG(pr.nbrratting) as averageRating', 'COUNT(pr.id) as totalRatings')
+        ->leftJoin('p.productRatings', 'pr')
+        ->groupBy('p.id')
+        ->having('COUNT(pr.id) > 0') // Exclut les produits sans évaluation
+        ->getQuery()
+        ->getResult();
+}
+
 //    /**
 //     * @return Product[] Returns an array of Product objects
 //     */
@@ -80,8 +96,8 @@ public function findByCategoryId(int $categoryId): array
 
     public function trieproddes()
     {
-        return $this->createQueryBuilder('prod')
-            ->orderBy('prod.price', 'DESC')
+        return $this->createQueryBuilder('prod') //mtaa requette doctrine
+            ->orderBy('prod.price', 'DESC') 
             ->getQuery()
             ->getResult();
     }

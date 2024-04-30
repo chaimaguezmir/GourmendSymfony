@@ -72,9 +72,18 @@
                     <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
                         <small class="fa fa-user text-body"></small>
                     </a>
-                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
-                        <small class="fa fa-shopping-bag text-body"></small>
-                    </a>
+
+
+                       <!-- Example showing how to display the number of shopping bags/paniers -->
+<a class="btn-sm-square bg-white rounded-circle ms-3" href="">
+    <small class="fa fa-shopping-bag text-body"></small>
+    {% if nombreDePaniers > 0 %}
+        <span class="badge bg-danger">{{ nombreDePaniers }}</span>  <!-- Display the count of paniers if greater than zero -->
+    {% endif %}
+</a>
+
+
+                     
                 </div>
             </div>
         </nav>

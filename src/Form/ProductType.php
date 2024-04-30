@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Categorie;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class ProductType extends AbstractType
 {
@@ -29,8 +30,11 @@ class ProductType extends AbstractType
             )))
             
             ->add('image',FileType::class,array("data_class"=>null))
-            ->add('date')
-            ->add('idCategorie', EntityType::class, [
+            ->add('date', DateTimeType::class, [
+                'widget' => 'single_text',
+                // Autres options
+            ])
+                     ->add('idCategorie', EntityType::class, [
                 'class' => Categorie::class,
                 'choice_label' => 'nom',
                 'choice_value' => 'nom',
