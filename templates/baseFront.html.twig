@@ -64,9 +64,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <a href="index.html" class="nav-item nav-link">Home</a>
-                    <a href="about.html" class="nav-item nav-link">About Us</a>
-                    <a href="{{ path('app_product_front') }}" class="nav-item nav-link active">Products</a>
+                    <a href="{{ path('front') }}" class="nav-item nav-link">Home</a>
+                    <a href="{{ path('frontres') }}" class="nav-item nav-link active">Tables</a>
+
+                    <a href="{{ path('frontresv') }}" class="nav-item nav-link">Mes Reservations</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                         <div class="dropdown-menu m-0">
@@ -85,13 +86,9 @@
                     <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
                         <small class="fa fa-user text-body"></small>
                     </a>
-                   <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
-    <small class="fa fa-shopping-bag text-body"></small>
-    {% if nombreDePaniers > 0 %}
-        <span class="badge bg-danger">{{ nombreDePaniers }}</span>  <!-- Display the count of paniers if greater than zero -->
-    {% endif %}
-</a>
-
+                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
+                        <small class="fa fa-shopping-bag text-body"></small>
+                    </a>
                 </div>
             </div>
         </nav>
@@ -107,7 +104,7 @@
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a class="text-body" href="#">Home</a></li>
                     <li class="breadcrumb-item"><a class="text-body" href="#">Pages</a></li>
-                    <li class="breadcrumb-item text-dark active" aria-current="page">Products</li>
+                    <li class="breadcrumb-item text-dark active" aria-current="page">Reservations</li>
                 </ol>
             </nav>
         </div>

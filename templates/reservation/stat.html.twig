@@ -1,0 +1,62 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Reservation Status Statistics{% endblock %}
+
+{% block body %}
+    <h1>Reservation Status Statistics</h1>
+
+    <div style="width: 1200px; height: 800px; margin: auto;">
+        <canvas id="statusChart"></canvas>
+    </div>
+    <center>
+        <br> <br> <br> <br>
+        <a href="{{ path('app_reservation_index') }}" class="btn btn-primary">Back</a>
+    </center>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var statistics = {{ statistics | json_encode | raw }};  // Correction : variable correcte
+            var ctx = document.getElementById('statusChart').getContext('2d');
+            var data = {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                        'rgba(255, 159, 64, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            statistics.forEach(function(stat) {
+                data.labels.push(stat.status);
+                data.datasets[0].data.push(stat.statusCount); // Correction : propriété correcte
+            });
+
+            var options = {
+                responsive: true,
+                maintainAspectRatio: false
+            };
+
+            var statusChart = new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: options
+            });
+        });
+    </script>
+{% endblock %}

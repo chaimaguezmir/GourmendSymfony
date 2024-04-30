@@ -1,0 +1,31 @@
+{% extends 'front.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="row">
+        {% for restaurant_table in restaurant_table %}
+        <!-- Card for each restaurant table -->
+        <div class="col-md-4">
+            <div class="card">
+                <img src="{{ asset('asset/admin/img/tab.jpg') }}" class="card-img-top" alt="Table {{ restaurant_table.id }}">
+                <div class="card-body">
+                    <h5 class="card-title">Table {{ restaurant_table.id }}</h5>
+                    <p class="card-text">{{ restaurant_table.description }}</p>
+                  {% if restaurant_table.available == 'Disponible' %}
+                  <a href="{{ path('app_reservation', {'tableId': restaurant_table.id}) }}" class="btn btn-primary">Réserver</a>
+                    {% else %}
+                        <p class="text-danger">Occupée</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <p class="col-md-12">Aucune table de restaurant trouvée.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

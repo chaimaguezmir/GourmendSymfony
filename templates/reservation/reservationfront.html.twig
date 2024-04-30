@@ -1,0 +1,50 @@
+{% extends 'front.html.twig' %}
+
+{% block body %}
+<div class="container">
+<br>
+<br>
+<br>
+<br>
+    <div class="row">
+        <!-- Card 1 -->
+        <div class="col-md-4">
+            <div class="card">
+                <img src="{{ asset('asset/admin/img/tab.jpg') }}" class="card-img-top" alt="Table 1">
+                <div class="card-body">
+                    <h5 class="card-title">Table 1</h5>
+                    <p class="card-text">Reservation de table numero 1 </p>
+                                        <a href="{{ path('app_reservation') }}" class="btn btn-primary">Réserver</a>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-md-4">
+            <div class="card">
+                <img src="{{ asset('asset/admin/img/tab.jpg') }}" class="card-img-top" alt="Table 2">
+                <div class="card-body">
+                    <h5 class="card-title">Table 2</h5>
+                    <p class="card-text">Reservation de table numero 2 </p>
+                                                            <a href="{{ path('app_reservation') }}" class="btn btn-primary">Réserver</a>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="col-md-4">
+            <div class="card">
+                <img src="{{ asset('asset/admin/img/tab.jpg') }}" class="card-img-top" alt="Table 3">
+                <div class="card-body">
+                    <h5 class="card-title">Table 3</h5>
+                    <p class="card-text">Reservation de table numero 3 </p>
+                                                            <a href="{{ path('app_reservation') }}" class="btn btn-primary">Réserver</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
