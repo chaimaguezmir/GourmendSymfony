@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PanierRepository::class)]
 class Panier
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\Id]  //clé primaire
+    #[ORM\GeneratedValue]  //auto increment
     #[ORM\Column]
     private ?int $id = null;
 

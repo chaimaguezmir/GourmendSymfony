@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: LivraisonRepository::class)]
 class Livraison
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\Id]  //clé primaire
+    #[ORM\GeneratedValue]  //auto increment
     #[ORM\Column]
     private ?int $id = null;
 
@@ -21,7 +21,7 @@ class Livraison
     #[ORM\Column(length: 255)]
     private ?string $adresse_arrive = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]   //ggghhhh
     private ?string $etat = null;
 
     #[ORM\Column]
