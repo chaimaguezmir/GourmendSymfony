@@ -1,0 +1,90 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Reservation index{% endblock %}
+
+{% block body %}
+    <h1>Reservation index</h1>
+      <div class="input-group">
+        <div class="search-container">
+            <label for="search-input" class="sr-only">Search Category</label>
+            <input id="search-input" class="form-control" type="text" placeholder="Search Category..." style="width: 30%; padding: 10px; margin:13px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;">
+        </div>  
+    </div>
+    <a href="{{ path('triespc') }}"><i class="btn btn-danger" data-feather="arrow-down"></i>statut Ascendant</a>
+    <a href="{{ path('triespcDESC') }}"><i class="btn btn-danger" data-feather="arrow-down"></i>status Desendent</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>CustomerName</th>
+                <th>NumberPersonnes</th>
+                <th>Descripition</th>
+                <th>DateTime</th>
+                <th>Table</th>
+
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.customerName }}</td>
+                <td>{{ reservation.numberPersonnes }}</td>
+                <td>{{ reservation.status }}</td>
+                <td>{{ reservation.dateTime ? reservation.dateTime|date('Y-m-d') : '' }}</td>
+               <td>Table {{ reservation.tableid }}</td>
+
+                <td>
+                    <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}">show</a>
+                    <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+                                            <a href="{{ path('reservation_stats') }}" class="btn btn-primary">stat</a>
+
+    <script src="{{ asset('https://code.jquery.com/jquery-3.5.1.min.js') }}"></script>
+<script>
+ $(document).ready(function() {
+    $('#search').on('keyup', function() {
+        var query = $(this).val(); // Obtenir le texte de la recherche
+
+        $.ajax({
+            url: "{{ path('backrechercheAjax') }}", // Votre route pour la recherche AJAX
+            method: 'GET',
+            data: { q: query }, // Envoyer le texte de la recherche comme paramètre
+            success: function(response) {
+                // Mettre à jour le contenu de la table avec la réponse du serveur
+                $('#tableBodyPlaceholder').html(response);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error("Erreur AJAX:", textStatus, errorThrown);
+            }
+        });
+    });
+});
+
+</script>
+    <a href="{{ path('app_reservation_new') }}">Create new</a>
+     <br>   <a href="{{ path('indewmain') }}">Calendrier </a>
+       {% block js %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script>
+    $(document).ready(function() {
+        $("#search-input").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("table tbody tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+
+    {% endblock %}
+{% endblock %}

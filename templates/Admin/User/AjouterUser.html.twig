@@ -1,4 +1,105 @@
 {% extends 'Admin/base.html.twig' %}
 {% block body %}
-{{form(form)}}
+   <div class="container mt-5">
+      <div class="row">
+      <div class="col-md-12">
+
+      <hr style="color: #103741; margin:0">
+      <div style="margin: 50px ;" class="container">
+          <div class="bg-light rounded">
+              <div class="row g-0">
+                  <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s"
+                       style="visibility: visible; animation-delay: 0.1s; animation-name: fadeIn;">
+                      <div class="h-100 d-flex flex-column justify-content-center p-5">
+                          <h1 class="mb-3 text-success">Add Users</h1>
+                          {{ form_start(form,{'attr': {'novalidate': 'novalidate'}} ) }}
+                          <div class="row g-3">
+                              <div class="col-12 mr-2">
+                                  <div class="form-floating">
+                                      {{ form_row(form.email, {'attr': {'class': 'form-control border-0',
+                                          }})
+                                      }}
+
+                                  </div>
+                              </div>
+                              <div class="col-12">
+                                  <div class="form-floating">
+                                      {{ form_row(form.roles, {'attr': {'class': 'form-control border-0',
+                                         }}) }}
+
+                                  </div>
+                              </div>
+                              <div class="col-12">
+                                  <div class="form-floating">
+                                      {{ form_row(form.age, {'attr': {'class': 'form-control border-0',
+                                          }}) }}
+
+                                  </div>
+                              </div>
+                              <div class="col-12">
+                                  <div class="form-floating">
+                                      {{ form_row(form.name, {'attr': {'class': 'form-control border-0',
+                                         }}) }}
+
+                                  </div>
+                              </div>
+                              <div class="col-12">
+                                  <div class="form-floating">
+                                      {{ form_row(form.prenom, {'attr': {'class': 'form-control border-0',
+                                          }}) }}
+                                  </div>
+                              </div>
+                              <div class="col-12">
+                                  <div class="form-floating">
+                                      {{ form_row(form.num_tel, {'attr': {'class': 'form-control border-0',
+                                       }}) }}
+                                  </div>
+                              </div>
+                              <div class="col-12">
+                                  <div class="form-floating">
+                                      {{ form_row(form.adresse, {'attr': {'class': 'form-control border-0',
+                                         }}) }}
+                                  </div>
+                              </div>
+                              <div class="col-12">
+                                  <div class="form-floating">
+                                      {{ form_row(form.image, {'attr': {'class': 'form-control border-0',
+                                          }}) }}
+                                  </div>
+                              </div>
+                                <div class="col-12">
+                                  <div class="form-floating">
+                                      {{ form_row(form.password, {'attr': {'class': 'form-control border-0',
+                                          }}) }}
+                                  </div>
+                              </div>
+
+                            
+                              <div class="col-sm-6">
+                                 
+                                  {{ form_row(form.Ajouter, {'attr': {'class': 'btn btn-success w-100 py-3'
+                                  
+                                  
+                                  }}) }}
+                              </div>
+                          </div>
+                          {{ form_end(form) }}
+
+                      </div>
+                  </div>
+                  <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s"
+                       style="min-height: 400px; visibility: visible; animation-delay: 0.5s; animation-name: fadeIn;">
+                      <div class="position-relative h-100">
+                          <img class="position-absolute w-100 h-100 rounded" src="{{ asset('asset/user/img/about.jpg') }}"
+                               style="object-fit: cover;">
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+
+      </div>
+      </div>
+      </div>
 {% endblock %}

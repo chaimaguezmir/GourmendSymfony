@@ -1,0 +1,14 @@
+{% extends 'front.html.twig' %}
+
+
+
+{% block body %}
+<br><br><br>
+        {{ form_start(form,{attr:{novalidate:'novalidate'}}) }}
+
+
+    {{ include('reservation/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('frontresv') }}">back to list</a>
+
+{% endblock %}

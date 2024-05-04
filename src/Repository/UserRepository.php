@@ -25,6 +25,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         parent::__construct($registry, User::class);
     }
 
+    public function search($mots){
+        $query = $this->createQueryBuilder('u');
+        if($mots != null){
+            $query->andWhere('MATCH_AGAINST (u.name,u.prenom,u.email) AGAINST 
+            (:mots boolean)>0')
+                ->setParameter('mots','%'.$mots.'%');
+
+        }
+        return $query->getQuery()->getResult();
+    }
+
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
@@ -39,6 +50,37 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+
+    public function searchUser($userVal=null)
+    {
+        $em = $this->getEntityManager();
+        $queryBuilder = $em->createQueryBuilder();
+        if($userVal!=null){
+            return $queryBuilder->select('c')
+                ->from(User::class , 'c')
+                ->where($queryBuilder->expr()->like('c.email', ':userVal'))
+                ->orWhere($queryBuilder->expr()->like('c.name', ':userVal'))
+                ->orWhere($queryBuilder->expr()->like('c.prenom', ':userVal'))
+                ->orWhere($queryBuilder->expr()->like('c.roles', ':userVal'))
+
+                ->setParameter('userVal', '%'.$userVal.'%')
+                ->setMaxResults(20)
+                ->getQuery()
+                ->getResult();
+        }
+        return $queryBuilder->select('c')
+            ->from(User::class, 'c')
+
+
+            ->orderBy('c.name','ASC')
+
+            ->getQuery()
+            ->getResult();
+    }
+    public function loadUserByEmail(string $email): ?User
+    {
+        return $this->findOneBy(['email' => $email]);
+    }
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

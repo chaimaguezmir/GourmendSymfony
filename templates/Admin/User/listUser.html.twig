@@ -1,0 +1,74 @@
+
+
+
+
+<div class="table-responsive">
+    <table class="table table-striped ">
+        <thead class="table-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Prénom</th>
+            <th scope="col">Âge</th>
+            <th scope="col">Active</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead  >
+<tbody id="tableBody">
+<!-- Data rows will be inserted here dynamically -->
+{% for user in i %}
+    <tr>
+        <td>#</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.prenom }}</td>
+        <td>{{ user.age }}</td>
+        <td>
+{#            <label class="form-switch mt-2">#}
+
+{#                <input type="checkbox" {{ (user.isActive)? 'checked' : '' }}#}
+{#                       data-id="{{ user.id }}"#}
+{#                />#}
+{#                <span class="form-slider"></span>#}
+            {% if user.isActive %}
+            <a class="btn  bg-danger  text-white btn-small mr-auto" href="{{ path('user.active', {'id': user.id}) }}">Desactiver</a>
+            {% else %}
+            <a class="btn  bg-danger  text-white btn-small mr-auto" href="{{ path('user.active', {'id': user.id}) }}">Activer</a>
+                {% endif %}
+{#            </label>#}
+
+{#            <div class="col-sm-5">#}
+{#                {% set foo = 'true' %}#}
+{#                {{ (user.isActive)? {% set foo='true' %} :  foo='false' }}#}
+{#                <button type="button" class="btn btn-sm btn-toggle active" data-toggle="button"#}
+{#                        aria-pressed="{{ foo }}"#}
+{#                       id = "activation"#}
+{#                        data-id="{{ user.id }}"  autocomplete="off">#}
+{#                    <div class="handle"></div>#}
+{#                </button>#}
+{#            </div>#}
+
+        </td>
+        <td>
+            <a href="{{ path('app_user.Supprimer', {'id': user.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
+            <a href="{{ path('app_user.Modifier', {'id': user.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+        </td>
+    </tr>
+{% endfor %}
+</tbody>
+    </table>
+</div>
+<script>
+
+
+    window.onload = () => {
+        let modal = new Axentix.Modal('#modal-example');
+        let active = document.querySelectorAll("[type=checkbox]");
+        for(let bouton of active){
+            bouton.addEventListener("click",function (){
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("get",`/user/activer/${this.dataset.id}`)
+                xmlHttp.send()
+            });
+        }
+    }
+</script>

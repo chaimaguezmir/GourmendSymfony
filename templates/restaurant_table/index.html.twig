@@ -1,0 +1,59 @@
+{% extends 'admin/base.html.twig' %}
+
+
+{% block title %}RestaurantTable index{% endblock %}
+
+{% block body %}
+    <h1>RestaurantTable index</h1>
+   <div class="input-group">
+        <div class="search-container">
+            <label for="search-input" class="sr-only">Search Category</label>
+            <input id="search-input" class="form-control" type="text" placeholder="Search Category..." style="width: 30%; padding: 10px; margin:13px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;">
+        </div>  
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Capacity</th>
+                <th>Available</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for restaurant_table in restaurant_tables %}
+            <tr>
+                <td>{{ restaurant_table.id }}</td>
+                <td>{{ restaurant_table.capacity }}</td>
+                <td>{{ restaurant_table.available }}</td>
+                <td>{{ restaurant_table.description }}</td>
+                <td>
+                    <a href="{{ path('app_restaurant_table_show', {'id': restaurant_table.id}) }}">show</a>
+                    <a href="{{ path('app_restaurant_table_edit', {'id': restaurant_table.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_restaurant_table_new') }}">Create new</a>
+         {% block js %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script>
+    $(document).ready(function() {
+        $("#search-input").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("table tbody tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+
+    {% endblock %}
+{% endblock %}

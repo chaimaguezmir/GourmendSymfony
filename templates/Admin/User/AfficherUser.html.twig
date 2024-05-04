@@ -1,32 +1,214 @@
 {% extends 'Admin/base.html.twig'%}
+   {% block style %}
+       <!-- Styles Bootstrap (CSS) -->
+
+       <!-- Axentix CSS minified version -->
+       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.css">
+       <!-- Scripts Bootstrap (JavaScript) -->
+
+   {% endblock %}
 {% block body %}
- <div class="container">
-    <h2>Users Table </h2>
-    <table class="table">
-      <thead class="thead-dark">
-        <tr>
-          
-          <th scope="col">Nom</th>
-          <th scope="col">Prenom</th>
-          <th scope="col">Age</th>
-          <th scope="col">Email</th>
-          <th scope="col">Adresse</th>
-          <th scope="col">Supprimer</th>
-           
-        </tr>
-      </thead>
-      <tbody>
-      {% for x in i %}
-        <tr>
-          <th scope="row">{{x.name}}</th>
-          <td>{{x.prenom}}</td>
-          <td>{{x.age}}</td>
-          <td>{{x.email}}</td>
-          <td>{{x.adresse}}</td>
-          <td><a href="{{path('app_user.Supprimer',{'id': x.id})}}" >Supprimer</a></td>
-        </tr>
-     {% endfor %}
-      </tbody>
+<script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var containers = document.querySelectorAll('.qrcode-container');
+        containers.forEach(function(container) {
+            var reference = container.dataset.reference;
+            var qrcode = new QRCode(container, {
+                text: reference,
+                width: 100,
+                height: 100
+            });
+        });
+    });
+</script>
+{#<div class="container">
+    <h2>Users Table</h2>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Âge</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in i %}
+            <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.prenom }}</td>
+                <td>{{ user.age }}</td>
+                <td>
+                    <a href="{{ path('app_user.Supprimer', {'id': user.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                    <a href="{{ path('app_user.Modifier', {'id': user.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
-  </div>
+</div>#}
+
+
+
+      <div class="container mt-5">
+          <div class="row-cols-lg-auto">
+              <div class="col-md-12">
+                  <h2 class="text-center mb-4">User Management</h2>
+                  <div class="form-inline mb-3">
+                      <a class="btn  bg-success  text-white btn-small mr-auto" href="{{ path('app_user.Ajout') }}">Add User</a>
+                      <button class="btn bg-success  text-white btn-small ml-auto" onclick="handleAdd()">Export data csv</button>
+                  </div>
+                  <!-- Filtrage et Tri -->
+
+                  <div class="form-inline mb-3 ">
+
+
+                      {{ form_start(form,{'attr': {'novalidate': 'novalidate'}} ) }}
+                      {{ form_row(form.mots, {'attr': {'class': 'form-control mr-2',
+                          'id' : 'searchInput'
+                      }}) }}
+                      {{ form_row(form.Rechercher, {'attr': {'class': 'btn bg-success  text-white',
+                      }}) }}
+
+                      {{ form_end(form) }}
+
+{#                    <input class="form-control mr-2" placplaceholder="Recherchez ici..." id="search-user" >#}
+{#                    <button class="btn bg-success  text-white">Rechercher</button>#}
+{#                      <div class="form-inline mb-3">#}
+
+{#                      </div>#}
+                  </div>
+
+                      <div  id="usercontent">
+
+                          <div class="table-responsive">
+                              <table class="table table-striped ">
+                                  <thead class="table-light">
+                                  <tr>
+                                      <th scope="col">#</th>
+                                      <th scope="col">Nom</th>
+                                      <th scope="col">Prénom</th>
+                                      <th scope="col">Âge</th>
+                                      <th scope="col">Active</th>
+                                      <th scope="col">Actions</th>
+                                  </tr>
+                                  </thead  >
+                                  <tbody id="tableBody">
+                                  <!-- Data rows will be inserted here dynamically -->
+                                  {% for user in i %}
+                                      <tr>
+                                          <td>#</td>
+                                          <td>{{ user.name }}</td>
+                                          <td>{{ user.prenom }}</td>
+                                          <td>{{ user.age }}</td>
+                                          <td>
+                                              {% if user.isActive %}
+                                                  <a class="btn btn-danger btn-sm" href="{{ path('user.active', {'id': user.id}) }}">Desactiver</a>
+                                              {% else %}
+                                                  <a class="btn btn-success btn-sm" href="{{ path('user.active', {'id': user.id}) }}">Activer</a>
+                                              {% endif %}
+{#                                              <label class="form-switch mt-2">#}
+
+{#                                                  <input type="checkbox"#}
+{#                                                        id="activation"#}
+{#                                                          {{ (user.isActive)? 'checked' : '' }}#}
+{#                                                         data-id="{{ user.id }}"#}
+{#                                                  />#}
+{#                                                  <span class="form-slider"></span>#}
+
+{#                                              </label>#}
+
+                                              {#            <div class="col-sm-5">#}
+                                              {#                {% set foo = 'true' %}#}
+                                              {#                {{ (user.isActive)? {% set foo='true' %} :  foo='false' }}#}
+                                              {#                <button type="button" class="btn btn-sm btn-toggle active" data-toggle="button"#}
+                                              {#                        aria-pressed="{{ foo }}"#}
+                                              {#                       id = "activation"#}
+                                              {#                        data-id="{{ user.id }}"  autocomplete="off">#}
+                                              {#                    <div class="handle"></div>#}
+                                              {#                </button>#}
+                                              {#            </div>#}
+
+                                          </td>
+                                          <td>
+                                              <a href="{{ path('app_user.Supprimer', {'id': user.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                                              <a href="{{ path('app_user.Modifier', {'id': user.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                              <a href="{{ path('user.details', {'id': user.id}) }}" class="btn btn-success btn-sm">Afficher</a>
+                                          </td>
+                                          <td>
+                        <div class="qrcode-container" data-reference="les informations du compte
+nom: {{ user.name }}
+prenom : {{ user.prenom }}
+age : {{ user.age }}"></div>
+                        </td>
+                                      </tr>
+                                  {% endfor %}
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+
+
+
+
+
+
+
+{#                  <div class="col-sm-5">#}
+{#                      <button type="button" class="btn btn-lg btn-toggle" data-toggle="button" aria-pressed="false" autocomplete="off">#}
+{#                          <div class="handle"></div>#}
+{#                      </button>#}
+{#                  </div>#}
+
+
+{#                 <div class="col-sm-5">#}
+{#                  <button type="button" class="btn btn-sm btn-toggle active" data-toggle="button" aria-pressed="true" autocomplete="off">#}
+{#                      <div class="handle"></div>#}
+{#                  </button>#}
+{#              </div>#}
+
+                  <nav aria-label="Page navigation">
+                      <ul class="pagination justify-content-center pagination-small">
+                          <li class="page-item">
+                              <a class="page-link" href="#" aria-label="Previous">
+                                  <span aria-hidden="true">&laquo;</span>
+                                  <span class="sr-only">Previous</span>
+                              </a>
+                          </li>
+                          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                          <li class="page-item"><a class="page-link" href="#">2</a></li>
+                          <!-- Ajouter plus de pages ici si nécessaire -->
+                          <li class="page-item">
+                              <a class="page-link" href="#" aria-label="Next">
+                                  <span aria-hidden="true">&raquo;</span>
+                                  <span class="sr-only">Next</span>
+                              </a>
+                          </li>
+                      </ul>
+                  </nav>
+              </div>
+          </div>
+      </div>
+
+{% endblock %}
+{% block js %}
+    <script>
+        window.onload = () => {
+            let modal = new Axentix.Modal('#modal-example');
+            let active = document.querySelectorAll("[type=checkbox]");
+            for(let bouton of active){
+                bouton.addEventListener("click",function (){
+                    let xmlHttp = new XMLHttpRequest();
+                    xmlHttp.open("get",`/user/activer/${this.dataset.id}`)
+                    xmlHttp.send()
+                });
+            }
+        }
+    </script>
+    <!-- Axentix JS minified version -->
+    <script src="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.js"></script>
+
+    <script src="{{ asset('./asset/user/js/usersearch.js')}}"></script>
 {% endblock %}

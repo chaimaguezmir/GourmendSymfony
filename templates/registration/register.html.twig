@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>
+        login
+
+    </title>
+
+
+    <link href="{{ asset('asset/admin/css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('asset/admin/css/style.css') }}">
+    <link href="{{asset('node_module/@fortawesome/fontawesome-free/css/all.css')}}" rel="stylesheet" />
+</head>
+
+<body id="page-top">
+
+<div class="container">
+
+    <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+                <div class="col-lg-5 d-none d-lg-block bg-register-image">
+                    <img class="position-absolute w-100 h-100 rounded" src="{{ asset('asset/user/img/about.jpg') }}"
+                         style="object-fit: cover;">
+                </div>
+                <div class="col-lg-7">
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                        </div>
+
+                            {{ form_start(registrationForm,{'attr': {'novalidate': 'novalidate',
+                                'class' : 'user'
+
+                            } }) }}
+
+                            {% for flash_error in app.flashes('verify_email_error') %}
+                                <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                            {% endfor %}
+{#                            {{ form_errors(registrationForm) }}#}
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+
+                                    {{ form_row(registrationForm.name,{ 'attr' : {
+                                        'class' : 'form-control form-control-user',
+                                        'placeholder' : 'First Name'
+
+                                    }}) }}
+                                </div>
+                                <div class="col-sm-6">
+
+                                    {{ form_row(registrationForm.prenom,{ 'attr' : {
+                                        'class' : 'form-control form-control-user',
+                                        'placeholder' : 'Last Name'
+
+                                    }}) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                {{ form_row(registrationForm.email,{ 'attr' : {
+                                    'class' : 'form-control form-control-user',
+                                    'placeholder' : 'Email Address'
+
+                                }}) }}
+                            </div>
+
+                            <div class="form-group ">
+
+
+                                    {{ form_row(registrationForm.password,{ 'attr' : {
+                                        'class' : 'form-control form-control-user',
+                                        'placeholder' : 'Password'
+
+                                    }}) }}
+                                </div>
+
+
+
+
+                        <div class="form-group ">
+                            {{ form_row(registrationForm.age,{ 'attr' : {
+                                'class' : 'form-control form-control-user',
+
+
+                            }}) }}
+                        </div>
+
+                            {{ form_row(registrationForm.agreeTerms,{ 'attr' : {
+
+
+
+                            }}) }}
+                            <button type="submit" class="btn btn-success btn-user btn-block">Register</button>
+                            {{ form_end(registrationForm) }}
+
+                        <hr>
+                        <div class="text-center">
+{#                            <a class="small" href="{{ path('app_forgot_password_request')}}">Forgot Password?</a>#}
+                            <a class="small" href="">Forgot Password?</a>
+                        </div>
+                        <div class="text-center">
+                            <a class="small" href="{{ path('app_login') }}">Already have an account? Login!</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+{#    {% for flash_error in app.flashes('verify_email_error') %}#}
+{#        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>#}
+{#    {% endfor %}#}
+
+{#    <h1>Register</h1>#}
+
+{#    {{ form_errors(registrationForm) }}#}
+
+{#    {{ form_start(registrationForm,{'attr': {'novalidate': 'novalidate'}}) }}#}
+{#        {{ form_row(registrationForm.email) }}#}
+{#        {{ form_row(registrationForm.plainPassword, {#}
+{#            label: 'Password'#}
+{#        }) }}#}
+{#        {{ form_row(registrationForm.agreeTerms) }}#}
+
+{#        <button type="submit" class="btn">Register</button>#}
+{#    {{ form_end(registrationForm) }}#}
+
+
+
+
+    <script src="{{ asset('asset/admin/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('asset/admin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{{ asset('asset/admin/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{{ asset('asset/admin/js/sb-admin-2.min.js') }}"></script>
+
+</body>
+
+</html>
