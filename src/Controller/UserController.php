@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/user'),IsGranted('ROLE_ADMIN')]
+#[Route('/user'), IsGranted('ROLE_ADMIN')]
 class UserController extends AbstractController
 {
     #[Route('/user', name: 'app_user')]
@@ -28,12 +28,11 @@ class UserController extends AbstractController
         ]);
     }
 
-    public function __construct(private ManagerRegistry $managerRegistry,
-                                private UserRepository  $userRepository,
-                                private UploderService  $uploderService
-    )
-    {
-
+    public function __construct(
+        private ManagerRegistry $managerRegistry,
+        private UserRepository  $userRepository,
+        private UploderService  $uploderService
+    ) {
     }
 
     #[Route('/user/ajout', name: 'app_user.Ajout')]
@@ -41,8 +40,7 @@ class UserController extends AbstractController
         Request                     $request,
         UserPasswordHasherInterface $userPasswordHasher
 
-    ): Response
-    {
+    ): Response {
 
         $user = new User();
         $em = $this->managerRegistry->getManager();
@@ -56,7 +54,8 @@ class UserController extends AbstractController
                 $userPasswordHasher->hashPassword(
                     $user,
                     $password
-                ));
+                )
+            );
             if ($picture) {
                 $newFileName = $this->uploderService->uploadFile($picture, $this->getParameter('user_directory'));
                 $user->setImage($newFileName);
@@ -64,7 +63,7 @@ class UserController extends AbstractController
             $user->setActive(true);
             $em->persist($user);
             $em->flush();
-            $this->addFlash('success',"user ajouté avec succe");
+            $this->addFlash('success', "user ajouté avec succe");
             return $this->redirectToRoute("app_user.Afficher");
         }
 
@@ -74,19 +73,18 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/afficher', name: 'app_user.Afficher')]
-    public function AfficherUser(UserRepository $userRepository,Request $request): Response
+    public function AfficherUser(UserRepository $userRepository, Request $request): Response
     {
         $i = $userRepository->findAll();
-          $form = $this->createForm(SearchUserType::class);
-           $search = $form->handleRequest($request);
-           if($form->isSubmitted() && $form->isValid()){
-               $i=$userRepository->search($search->get('mots')->getData());
-           }
+        $form = $this->createForm(SearchUserType::class);
+        $search = $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $i = $userRepository->search($search->get('mots')->getData());
+        }
         return $this->render('Admin/User/AfficherUser.html.twig', [
             'i' => $i,
             'form'  => $form->createView()
         ]);
-
     }
 
     #[Route('/user/supprimer/{id}', name: 'app_user.Supprimer')]
@@ -102,7 +100,7 @@ class UserController extends AbstractController
         $em = $managerRegistry->getManager();
         $em->remove($i);
         $em->flush();
-        $this->addFlash('success',"user supprimer avec succe");
+        $this->addFlash('success', "user supprimer avec succe");
         return $this->redirectToRoute('app_user.Afficher');
     }
 
@@ -112,8 +110,7 @@ class UserController extends AbstractController
         $id,
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher
-    )
-    {
+    ) {
         $user = $this->userRepository->find($id);
         $form = $this->createForm(UserType::class, $user);
         $form->remove('token');
@@ -127,36 +124,35 @@ class UserController extends AbstractController
                 $userPasswordHasher->hashPassword(
                     $user,
                     $password
-                ));
+                )
+            );
             if ($picture) {
                 $newFileName = $this->uploderService->uploadFile($picture, $this->getParameter('user_directory'));
                 $user->setImage($newFileName);
             }
             $em->persist($user);
             $em->flush();
-            $this->addFlash('success',"user modifier avec succe");
+            $this->addFlash('success', "user modifier avec succe");
             return $this->redirectToRoute('app_user.Afficher');
         }
         return $this->render('Admin/User/ModifierUser.html.twig', [
             'form' => $form->createView()
 
         ]);
-
-
     }
 
     #[Route('/user/activer/{id}', name: 'user.active')]
-    public function activerUser(User $user =null,ManagerRegistry $managerRegistry)
+    public function activerUser(User $user = null, ManagerRegistry $managerRegistry)
     {
 
-        $user->setActive(($user->isActive())? false : true);
+        $user->setActive(($user->isActive()) ? false : true);
         $em = $managerRegistry->getManager();
         $em->persist($user);
         $em->flush();
         return $this->redirectToRoute('app_user.Afficher');
     }
     #[Route('/user/details/{id}', name: 'user.details')]
-    public function UserDetails(User $user =null,UserRepository $repository)
+    public function UserDetails(User $user = null, UserRepository $repository)
     {
 
 
@@ -164,6 +160,4 @@ class UserController extends AbstractController
             'user' => $user
         ]);
     }
-
 }
-

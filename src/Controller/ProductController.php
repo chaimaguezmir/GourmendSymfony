@@ -22,11 +22,11 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Repository\PanierRepository;
- 
+
 
 class ProductController extends AbstractController
 {
-   
+
 
     #[Route('/pdfp', name: 'pdfP', methods: ['GET'])]
     public function pdf(ProductRepository $productRepository): Response
@@ -82,9 +82,10 @@ class ProductController extends AbstractController
         );
     }
     #[Route('/rating_statistics', name: 'rating_statistics')]
-    public function ratingStatistics(ProductRepository $productRepository,PanierRepository $panierRepository): Response
-    {$nombreDePaniers = $panierRepository->count([]);
-        
+    public function ratingStatistics(ProductRepository $productRepository, PanierRepository $panierRepository): Response
+    {
+        $nombreDePaniers = $panierRepository->count([]);
+
         // Rendre la variable accessible globalement dans les templates Twig
         $this->get('twig')->addGlobal('nombreDePaniers', $nombreDePaniers);
 
@@ -107,16 +108,17 @@ class ProductController extends AbstractController
             $request->query->getInt('page', 1), // Récupérer le numéro de page à partir de la requête, 1 par défaut
             3 // Nombre d'éléments par page //9otlou page wahda tekhou 3 lokhra dhenya kdhet zuuz khater mafamesh theldha
         );
-    
+
         return $this->render('product/index.html.twig', [
             'products' => $pagination, // Passer la pagination à la vue
         ]);
     }
 
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager ,PanierRepository $panierRepository): Response
-    {$nombreDePaniers = $panierRepository->count([]);
-        
+    public function new(Request $request, EntityManagerInterface $entityManager, PanierRepository $panierRepository): Response
+    {
+        $nombreDePaniers = $panierRepository->count([]);
+
         // Rendre la variable accessible globalement dans les templates Twig
         $this->get('twig')->addGlobal('nombreDePaniers', $nombreDePaniers);
 
@@ -129,12 +131,12 @@ class ProductController extends AbstractController
 
             $fileName = md5(uniqid()) . '.' . $fileUpload->guessExtension();
 
-            $fileUpload->move($this->getParameter('kernel.project_dir') . '/public/uploads', $fileName);// Creation dossier uploads
+            $fileUpload->move($this->getParameter('kernel.project_dir') . '/public/uploads', $fileName); // Creation dossier uploads
 
             $product->setImage($fileName);
             $entityManager->persist($product);
             $entityManager->flush();
-            
+
             $this->addFlash( //heya mohtama b notification
                 'success',
                 'Added successfully!'
@@ -149,7 +151,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-/*
+    /*
  
     #[Route('/product/{id}', name: 'app_product_show', methods: ['GET'])]
     public function show(ProductRepository $productRepository, Product $product, ProductRating $productRating, int $id): Response
@@ -168,25 +170,25 @@ class ProductController extends AbstractController
     }
     */
 
-    
+
     #[Route('/product/{id}', name: 'app_product_show', methods: ['GET'])]
-    public function show(PanierRepository $panierRepository ,ProductRepository $productRepository, Product $product, ProductRating $productRating, int $id): Response
+    public function show(PanierRepository $panierRepository, ProductRepository $productRepository, Product $product, ProductRating $productRating, int $id): Response
     {
         $nombreDePaniers = $panierRepository->count([]);
-        
+
         // Rendre la variable accessible globalement dans les templates Twig
         $this->get('twig')->addGlobal('nombreDePaniers', $nombreDePaniers);
 
         // Récupérer le produit
         $product = $productRepository->find($id);
-        
+
         if (!$product) {
             throw $this->createNotFoundException('Product not found');
         }
-    
+
         // Récupérer les évaluations pour ce produit
         $ratings = $product->getProductRatings();
-    
+
         // Calculer la moyenne des évaluations
         $totalRatings = count($ratings);
         $sumRatings = 0;
@@ -194,51 +196,51 @@ class ProductController extends AbstractController
             $sumRatings += $rating->getNbrratting();
         }
         $averageRating = $totalRatings > 0 ? $sumRatings / $totalRatings : 0;
-    
+
         return $this->render('product/showfront.html.twig', [
             'product' => $product,
             'averageRating' => $averageRating,
         ]);
     }
-    
+
     #[Route('/productt/{id}', name: 'app_product_showw', methods: ['GET'])]
-public function showw(ProductRepository $productRepository, Product $product , PanierRepository $panierRepository, ProductRating $productRating, int $id): Response
-{
-    $nombreDePaniers = $panierRepository->count([]);
-        
+    public function showw(ProductRepository $productRepository, Product $product, PanierRepository $panierRepository, ProductRating $productRating, int $id): Response
+    {
+        $nombreDePaniers = $panierRepository->count([]);
+
         // Rendre la variable accessible globalement dans les templates Twig
         $this->get('twig')->addGlobal('nombreDePaniers', $nombreDePaniers);
 
-    $product = $productRepository->find($id);
-    
-    if (!$product) {
-        throw $this->createNotFoundException('Product not found');
+        $product = $productRepository->find($id);
+
+        if (!$product) {
+            throw $this->createNotFoundException('Product not found');
+        }
+        // Récupérer les évaluations pour ce produit
+        $ratings = $product->getProductRatings();
+
+        // Calculer la moyenne des évaluations
+        $totalRatings = count($ratings);
+        $sumRatings = 0;
+        foreach ($ratings as $rating) {
+            $sumRatings += $rating->getNbrratting();
+        }
+        $averageRating = $totalRatings > 0 ? $sumRatings / $totalRatings : 0;
+
+        return $this->render('product/showfront.html.twig', [
+            'product' => $product,
+            'averageRating' => $averageRating,
+
+        ]);
     }
-  // Récupérer les évaluations pour ce produit
-  $ratings = $product->getProductRatings();
-    
-  // Calculer la moyenne des évaluations
-  $totalRatings = count($ratings);
-  $sumRatings = 0;
-  foreach ($ratings as $rating) {
-      $sumRatings += $rating->getNbrratting();
-  }
-  $averageRating = $totalRatings > 0 ? $sumRatings / $totalRatings : 0;
-
-    return $this->render('product/showfront.html.twig', [
-        'product' => $product,
-        'averageRating' => $averageRating,
-
-    ]);
-}
 
 
-    
+
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Product $product, EntityManagerInterface $entityManager , PanierRepository $panierRepository): Response
+    public function edit(Request $request, Product $product, EntityManagerInterface $entityManager, PanierRepository $panierRepository): Response
     {
         $nombreDePaniers = $panierRepository->count([]);
-        
+
         // Rendre la variable accessible globalement dans les templates Twig
         $this->get('twig')->addGlobal('nombreDePaniers', $nombreDePaniers);
 
@@ -250,7 +252,7 @@ public function showw(ProductRepository $productRepository, Product $product , P
 
             $fileName = md5(uniqid()) . '.' . $fileUpload->guessExtension();
 
-            $fileUpload->move($this->getParameter('kernel.project_dir') . '/public/uploads', $fileName);// Creation dossier uploads
+            $fileUpload->move($this->getParameter('kernel.project_dir') . '/public/uploads', $fileName); // Creation dossier uploads
 
             $product->setImage($fileName);
             $entityManager->flush();
@@ -271,13 +273,14 @@ public function showw(ProductRepository $productRepository, Product $product , P
     }
 
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
-    public function delete(Request $request, Product $product, EntityManagerInterface $entityManager ,PanierRepository $panierRepository): Response
-     {$nombreDePaniers = $panierRepository->count([]);
-        
+    public function delete(Request $request, Product $product, EntityManagerInterface $entityManager, PanierRepository $panierRepository): Response
+    {
+        $nombreDePaniers = $panierRepository->count([]);
+
         // Rendre la variable accessible globalement dans les templates Twig
         $this->get('twig')->addGlobal('nombreDePaniers', $nombreDePaniers);
 
-        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $product->getId(), $request->request->get('_token'))) {
             $entityManager->remove($product);
             $entityManager->flush();
 
@@ -291,7 +294,7 @@ public function showw(ProductRepository $productRepository, Product $product , P
     }
 
 
-  /*  #[Route('/front', name: 'app_categorie_front')]
+    /*  #[Route('/front', name: 'app_categorie_front')]
     public function productsPage(CategorieRepository $categorieRepository): Response
 {
     $categories = $categorieRepository->findAllWithProducts();
@@ -320,29 +323,30 @@ public function showw(ProductRepository $productRepository, Product $product , P
 
 
 
-#[Route('/prodfront', name: 'app_product_front')]
-public function indexx(Request $request, ProductRepository $productRepository,PanierRepository $panierRepository, CategorieRepository $categorieRepository): Response
-{
+    #[Route('/prodfront', name: 'app_product_front')]
+    public function indexx(Request $request, ProductRepository $productRepository, PanierRepository $panierRepository, CategorieRepository $categorieRepository): Response
+    {
 
-    $nombreDePaniers = $panierRepository->count([]);
-        
-    // Rendre la variable accessible globalement dans les templates Twig
-    $this->get('twig')->addGlobal('nombreDePaniers', $nombreDePaniers);
-    $categorieId = $request->query->get('categorie');
+        $nombreDePaniers = $panierRepository->count([]);
 
-    if ($categorieId) {
-        $products = $productRepository->findBy(['idCategorie' => $categorieId]);
-    } else {
-        $products = $productRepository->findAll();
+        // Rendre la variable accessible globalement dans les templates Twig
+        $this->get('twig')->addGlobal('nombreDePaniers', $nombreDePaniers);
+        $categorieId = $request->query->get('categorie');
+
+        if ($categorieId) {
+            $products = $productRepository->findBy(['idCategorie' => $categorieId]);
+        } else {
+            $products = $productRepository->findAll();
+        }
+
+        $categories = $categorieRepository->findAll();
+
+        return $this->render('product/productFront.html.twig', [
+            'products' => $products,
+            'categories' => $categories,
+        ]);
     }
 
-    $categories = $categorieRepository->findAll();
-
-    return $this->render('product/productFront.html.twig', [
-        'products' => $products,
-        'categories' => $categories,
-    ]);
-}
 
 
 
@@ -352,58 +356,52 @@ public function indexx(Request $request, ProductRepository $productRepository,Pa
 
 
 
-
-#[Route('/front', name: 'front', methods: ['GET'])]
-public function front(ProductRepository $productRepository,PanierRepository $panierRepository): Response
-{ 
-    
-    
-    $nombreDePaniers = $panierRepository->count([]);
-        
-    // Rendre la variable accessible globalement dans les templates Twig
-    $this->get('twig')->addGlobal('nombreDePaniers', $nombreDePaniers);
-    return $this->render('baseFront.html.twig', [
-        'products' => $productRepository->findAll(),
-    ]);
-}
+    #[Route('/front', name: 'front', methods: ['GET'])]
+    public function front(ProductRepository $productRepository, PanierRepository $panierRepository): Response
+    {
 
 
+        $nombreDePaniers = $panierRepository->count([]);
 
-
-
-
-
-
-#[Route('/front/filter-products', name: 'app_product_filter', methods: ['POST'])]
-public function filterProducts(Request $request, ProductRepository $productRepository ,PanierRepository $panierRepository): JsonResponse
-{  $nombreDePaniers = $panierRepository->count([]);
-        
-    // Rendre la variable accessible globalement dans les templates Twig
-    $this->get('twig')->addGlobal('nombreDePaniers', $nombreDePaniers);
-    // Récupérer l'ID de la catégorie sélectionnée depuis la requête AJAX
-    $categoryId = $request->request->get('categoryId'); // Utiliser 'categoryId' au lieu de 'idCategorie'
-
-    // Récupérer les produits associés à la catégorie sélectionnée
-    $products = $productRepository->findByCategoryId($categoryId);
-
-    // Créer un tableau des données des produits
-    $productData = [];
-    foreach ($products as $product) {
-        $productData[] = [
-            'id' => $product->getId(),
-            'name' => $product->getName(), // Modifier pour correspondre à votre nom de champ dans l'entité Product
-            'image' => $product->getImage(), // Modifier pour correspondre à votre nom de champ dans l'entité Product
-            'price' => $product->getPrice(), // Modifier pour correspondre à votre nom de champ dans l'entité Product
-        ];
+        // Rendre la variable accessible globalement dans les templates Twig
+        $this->get('twig')->addGlobal('nombreDePaniers', $nombreDePaniers);
+        return $this->render('baseFront.html.twig', [
+            'products' => $productRepository->findAll(),
+        ]);
     }
 
-    // Retourner les données des produits au format JSON
-    return new JsonResponse($productData);
-}
 
 
 
 
 
 
+
+    #[Route('/front/filter-products', name: 'app_product_filter', methods: ['POST'])]
+    public function filterProducts(Request $request, ProductRepository $productRepository, PanierRepository $panierRepository): JsonResponse
+    {
+        $nombreDePaniers = $panierRepository->count([]);
+
+        // Rendre la variable accessible globalement dans les templates Twig
+        $this->get('twig')->addGlobal('nombreDePaniers', $nombreDePaniers);
+        // Récupérer l'ID de la catégorie sélectionnée depuis la requête AJAX
+        $categoryId = $request->request->get('categoryId'); // Utiliser 'categoryId' au lieu de 'idCategorie'
+
+        // Récupérer les produits associés à la catégorie sélectionnée
+        $products = $productRepository->findByCategoryId($categoryId);
+
+        // Créer un tableau des données des produits
+        $productData = [];
+        foreach ($products as $product) {
+            $productData[] = [
+                'id' => $product->getId(),
+                'name' => $product->getName(), // Modifier pour correspondre à votre nom de champ dans l'entité Product
+                'image' => $product->getImage(), // Modifier pour correspondre à votre nom de champ dans l'entité Product
+                'price' => $product->getPrice(), // Modifier pour correspondre à votre nom de champ dans l'entité Product
+            ];
+        }
+
+        // Retourner les données des produits au format JSON
+        return new JsonResponse($productData);
+    }
 }
