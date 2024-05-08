@@ -20,6 +20,7 @@ class ProductRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Product::class);
     }
+
 /**
  * Calculate statistics of products based on their ratings.
  *
@@ -35,6 +36,7 @@ public function calculateRatingStatistics(): array
         ->getQuery()
         ->getResult();
 }
+
 //    /**
 //     * @return Product[] Returns an array of Product objects
 //     */
@@ -59,4 +61,46 @@ public function calculateRatingStatistics(): array
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function findByCategoryId(int $categoryId): array
+{
+    return $this->createQueryBuilder('p')
+        ->join('p.idCategorie', 'c')
+        ->andWhere('c.id = :categoryId')
+        ->setParameter('categoryId', $categoryId)
+        ->getQuery()
+        ->getResult();
+}
+
+
+/**
+     * return Product[]
+     */
+   
+     public function findprodbyNom($nom)
+     {
+         return $this->createQueryBuilder('cat')
+             ->where('cat.nom LIKE :nom')
+             ->setParameter('nom', '%'.$nom.'%')
+             ->getQuery()
+             ->getResult();
+     }
+
+     public function trieprod()
+    {
+        return $this->createQueryBuilder('prod')
+            ->orderBy('prod.price', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    public function trieproddes()
+    {
+        return $this->createQueryBuilder('prod') //mtaa requette doctrine
+            ->orderBy('prod.price', 'DESC') 
+            ->getQuery()
+            ->getResult();
+    }
+
+
 }
