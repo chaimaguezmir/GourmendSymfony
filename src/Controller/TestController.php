@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\PanierRepository;
 
 class TestController extends AbstractController
 {
@@ -23,6 +24,16 @@ class TestController extends AbstractController
         return $this->render('ClientSide/base.html.twig', [
             'name' => 'chaima',
         ]);
+    }
+    #[Route('/panier', name: 'app_panier')]
+    public function panier(PanierRepository $panierRepository ): Response
+    {  
+        $nombreDePaniers = $panierRepository->count([]);
+        
+        // Rendre la variable accessible globalement dans les templates Twig
+        $this->get('twig')->addGlobal('nombreDePaniers', $nombreDePaniers);
+
+        return $this->render('front.html.twig');
     }
     #[Route('/email')]
     public function sendEmail(MailerInterface $mailer)

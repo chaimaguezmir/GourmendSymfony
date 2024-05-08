@@ -1,0 +1,68 @@
+{% extends 'front.html.twig' %}
+
+
+{% block body %}
+<br><br><br>
+
+
+   
+<div class="container">
+{% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+        {{message}}
+    {% endfor %}
+    <form action="{{ path('app_product_front') }}" method="get">
+        <div class="form-group">
+            <label for="categorie">Filter by Category:</label>
+            <select name="categorie" id="categorie" class="form-control" onchange="this.form.submit()">
+                <option value="">--Choose a category--</option>
+                {% set defaultCategory = 'Desert' %} <!-- Assuming 'Desert' is the name -->
+                {% for categorie in categories %}
+                    <option value="{{ categorie.id }}" 
+                        {% if app.request.query.get('categorie')|default(defaultCategory) == categorie.nom %}
+                            selected
+                        {% endif %}>
+                        {{ categorie.nom }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+
+    <div class="row">
+
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <img style="width: 100px; height:100px; padding: 5px;" src="{{ asset('uploads/'~product.image) }}"/>
+                    <h5 class="card-title">{{ product.prodName }}</h5>
+            
+                    <p class="card-text">Price: {{ product.price }}</p>
+                    <p class="card-text">Category: {{ product.idCategorie.nom }}</p>
+                    <a href="{{ path('app_product_showw', {'id': product.id}) }}" class="btn btn-primary">Show</a>
+                                  <a href="{{ path('app_product_rating_new', {'id': product.id}) }}" class="btn btn-success">add ratting</a>
+                        {% if product.stock != 0 %}
+
+                    <form action="{{ path('app_add_to_cart') }}" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="{{ product.id }}">
+                            <input type="hidden" name="prod_name" value="{{ product.prodName }}">
+                            <input type="hidden" name="price" value="{{ product.price }}">
+
+
+                            <button type="submit" class="btn btn-success">Add to Cart</button>
+                        </form>
+                                                              {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+
+        {% else %}
+            <p>No products found.</p>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

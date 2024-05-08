@@ -76,8 +76,10 @@
                         <div class="dropdown-menu m-0">
                             <a href="blog.html" class="dropdown-item">Blog Grid</a>
                             <a href="feature.html" class="dropdown-item">Our Features</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                            <a href="404.html" class="dropdown-item">404 Page</a>
+                             <a href="{{ path('front') }}" class="nav-item nav-link">Home</a>
+                     <a href="{{ path('frontres') }}" class="nav-item nav-link ">Tables</a>
+
+                    <a href="{{ path('frontresv') }}" class="nav-item nav-link">Mes Reservations</a>
                         </div>
                     </div>
                     {% endif %}

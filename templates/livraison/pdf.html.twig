@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des commandes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Liste des commandes</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Adresse de destination</th>
+                <th>Prix total</th>
+                <th>Statut</th>
+                <th>Id de la personne</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cmd in cmds %}
+                <tr>
+                    <td>{{ cmd.id }}</td>
+                    <td>{{ cmd.date ? cmd.date|date('Y-m-d') : '' }}</td>
+                    <td>{{ cmd.adresseDest }}</td>
+                    <td>{{ cmd.prixTotal }}</td>
+                    <td>{{ cmd.status }}</td>
+                    <td>{{ cmd.idPersonne }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

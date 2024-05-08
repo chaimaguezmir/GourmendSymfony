@@ -1,0 +1,42 @@
+{% extends 'front.html.twig' %}
+
+{% block body %}
+<div class="container my-5">
+    <br><br>
+    <h2>Your Cart</h2>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">nom produit</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set totalPrice = 0 %}
+
+                {% for item in panier %}
+                        <tr>
+                            <td>{{ item.prod_name}}</td>
+                            <td>{{ item.price}}</td>
+                            <td>
+               <a href="{{ path('app_remove_from_cart', {'id': item.id}) }}"><button type="submit" class="btn btn-primary">Remove</button></a>
+
+                   </td>
+                        </tr>
+                    {% set totalPrice = totalPrice + item.price %}
+
+
+                {% endfor %}
+            </tbody>
+        </table>
+Total Price<h2> {{ totalPrice}} </h2> 
+    <a href="{{ path('app_product_front') }}">ajout du produit</a>
+
+      <br>
+        <a href="{{ path('app_commande_new', {'somme': totalPrice}) }}"><button type="submit" class="btn btn-success">Valider le Panier</button></a>
+
+    </div>
+</div>
+{% endblock %}

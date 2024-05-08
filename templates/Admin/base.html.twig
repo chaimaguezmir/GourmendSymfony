@@ -67,7 +67,34 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Gestion Table </span></a>
             </li>
-           
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="http://127.0.0.1:8000/P">
+                     <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Gestion Produit</span></a>
+            </li>
+            
+             <li class="nav-item active">
+                <a class="nav-link" href="http://127.0.0.1:8000/categorie/">
+                     <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Gestion categorie</span></a>
+            </li>
+<li class="nav-item active">
+                <a class="nav-link" href="{{ path('statistiques_commandes') }}">
+                     <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Stat</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('app_livraison_index') }}">
+                     <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Livraison</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('app_commande_indexb') }}">
+                     <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Commande</span></a>
+            </li>
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
